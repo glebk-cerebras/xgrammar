@@ -1,11 +1,11 @@
 from typing import List, Optional, Union
 
 import torch
-import triton
-import triton.language as tl
+# import triton
+# import triton.language as tl
 
 
-@triton.jit
+# @triton.jit
 def apply_token_bitmask_inplace_kernel(
     logits_ptr,
     bitmask_ptr,
@@ -13,8 +13,8 @@ def apply_token_bitmask_inplace_kernel(
     num_rows,
     vocab_size,
     bitmask_size,
-    NUM_SMS: tl.constexpr,
-    BLOCK_SIZE: tl.constexpr,
+    NUM_SMS, #: tl.constexpr,
+    BLOCK_SIZE, #: tl.constexpr,
 ):
     pid = tl.program_id(0)
     num_blocks = tl.cdiv(vocab_size, BLOCK_SIZE)

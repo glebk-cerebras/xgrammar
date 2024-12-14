@@ -95,6 +95,10 @@ class GrammarMatcher {
    */
   void FillNextTokenBitmask(DLTensor* next_token_bitmask, int index = 0);
 
+  void FillNextTokenBitmask(
+    intptr_t token_bitmask_ptr, std::vector<int64_t> shape, int index = 0
+  );
+
   /*!
    * \brief Find the jump-forward string for jump-forward decoding. This is the longest string that
    will be valid according to the current syntax.

@@ -22,6 +22,8 @@ namespace xgrammar {
 
 int32_t GetBitmaskSize(int vocab_size) { return DynamicBitset::GetBufferSize(vocab_size); }
 
+// bool GetBitmaskValue()
+
 DLDataType GetBitmaskDLType() { return DLDataType{kDLInt, 32, 1}; }
 
 int32_t* CheckAndGetBitmaskPtr(const DLTensor& token_bitmask, int vocab_size, int index) {
@@ -714,6 +716,23 @@ bool GrammarMatcher::AcceptToken(int32_t token_id, bool debug_print) {
 
 void GrammarMatcher::FillNextTokenBitmask(DLTensor* next_token_bitmask, int index) {
   pimpl_->FillNextTokenBitmask(next_token_bitmask, index);
+}
+
+void GrammarMatcher::FillNextTokenBitmask(
+    intptr_t token_bitmask_ptr, std::vector<int64_t> shape, int index
+) {
+  XGRAMMAR_CHECK(shape.size() == 1 || shape.size() == 2) << "token_bitmask tensor must be 1D or 2D";
+
+  DLTensor bitmask_dltensor{
+      reinterpret_cast<void*>(token_bitmask_ptr),
+      DLDevice{kDLCPU, 0},
+      static_cast<int32_t>(shape.size()),
+      GetBitmaskDLType(),
+      shape.data(),
+      nullptr,
+      0
+  };
+  FillNextTokenBitmask(&bitmask_dltensor, index);
 }
 
 std::string GrammarMatcher::FindJumpForwardString() { return pimpl_->FindJumpForwardString(); }

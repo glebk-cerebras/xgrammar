@@ -58,8 +58,12 @@ set(XGRAMMAR_INCLUDE_PATH
 file(GLOB_RECURSE XGRAMMAR_SOURCES_PATH "${PROJECT_SOURCE_DIR}/cpp/*.cc")
 list(FILTER XGRAMMAR_SOURCES_PATH EXCLUDE REGEX "${PROJECT_SOURCE_DIR}/cpp/pybind/.*\\.cc")
 
-add_library(xgrammar STATIC ${XGRAMMAR_SOURCES_PATH})
+add_library(xgrammar SHARED ${XGRAMMAR_SOURCES_PATH})
 target_include_directories(xgrammar PUBLIC ${XGRAMMAR_INCLUDE_PATH})
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(xgrammar PRIVATE Threads::Threads)
 
 if(XGRAMMAR_BUILD_PYTHON_BINDINGS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/cpp/pybind)
@@ -78,3 +82,6 @@ if(XGRAMMAR_BUILD_CXX_TESTS)
   include(GoogleTest)
   gtest_discover_tests(xgrammar_test)
 endif()
+
+add_executable(xgrammar_runner main.cpp)
+target_link_libraries(xgrammar_runner xgrammar)
