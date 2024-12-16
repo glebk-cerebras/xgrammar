@@ -44,6 +44,12 @@ class GrammarMatcherBase {
     PushInitialState(init_rule_position, expand_init_rule_position);
   }
 
+  GrammarMatcherBase(const GrammarMatcherBase& other)
+    : grammar_(other.grammar_),
+      persistent_stack_(other.persistent_stack_),
+      stack_tops_history_(other.stack_tops_history_),
+      tmp_new_stack_tops_(other.tmp_new_stack_tops_) {}
+
   /*! \brief Accept one character. */
   bool AcceptChar(uint8_t char_value, bool debug_print = false);
 

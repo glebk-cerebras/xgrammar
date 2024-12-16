@@ -240,6 +240,19 @@ class GrammarMatcher::Impl : public GrammarMatcherBase {
         << "The override_stop_tokens should not be empty";
   }
 
+  Impl(const Impl& other)
+      : GrammarMatcherBase(other),
+        compiled_grammar_(other.compiled_grammar_),
+        tokenizer_info_(other.tokenizer_info_),
+        stop_token_ids_(other.stop_token_ids_),
+        terminate_without_stop_token_(other.terminate_without_stop_token_),
+        max_rollback_tokens_(other.max_rollback_tokens_),
+        token_length_history(other.token_length_history),
+        tmp_rejected_indices_(other.tmp_rejected_indices_),
+        tmp_rejected_indices_delta_(other.tmp_rejected_indices_delta_) {
+        tmp_accepted_bitset_ = other.tmp_accepted_bitset_;
+  }
+
   bool AcceptToken(int32_t token_id, bool debug_print = false);
 
   void FillNextTokenBitmask(DLTensor* next_token_bitmask, int index);
@@ -710,6 +723,11 @@ GrammarMatcher::GrammarMatcher(
     : pimpl_(std::make_shared<GrammarMatcher::Impl>(
           compiled_grammar, override_stop_tokens, terminate_without_stop_token, max_rollback_tokens
       )) {}
+
+GrammarMatcher GrammarMatcher::Clone() const {
+  return GrammarMatcher(std::make_shared<GrammarMatcher::Impl>(*pimpl_));
+}
+
 bool GrammarMatcher::AcceptToken(int32_t token_id, bool debug_print) {
   return pimpl_->AcceptToken(token_id, debug_print);
 }

@@ -67,6 +67,7 @@ PYBIND11_MODULE(xgrammar_bindings, m) {
       .def("rollback", &GrammarMatcher::Rollback)
       .def("is_terminated", &GrammarMatcher::IsTerminated)
       .def("reset", &GrammarMatcher::Reset)
+      .def("clone", &GrammarMatcher::Clone)
       .def_property_readonly("max_rollback_tokens", &GrammarMatcher::GetMaxRollbackTokens)
       .def_property_readonly("stop_token_ids", &GrammarMatcher::GetStopTokenIds)
       .def("_debug_accept_string", &GrammarMatcher::_DebugAcceptString);

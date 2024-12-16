@@ -122,6 +122,9 @@ class GrammarMatcher {
   /*! \brief Reset the matcher to the initial state. */
   void Reset();
 
+  /*! \brief Copy matcher instance. */
+  GrammarMatcher Clone() const;
+
   /*! \brief Get the maximum number of rollback tokens allowed. */
   int GetMaxRollbackTokens() const;
 

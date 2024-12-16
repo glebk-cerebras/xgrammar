@@ -266,6 +266,9 @@ class GrammarMatcher(XGRObject):
         """Reset the matcher to the initial state."""
         return self._handle.reset()
 
+    def clone(self):
+        return self._handle.clone()
+
     @property
     def max_rollback_tokens(self) -> int:
         """Get the maximum number of rollback tokens allowed.
